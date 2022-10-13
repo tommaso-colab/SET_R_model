@@ -8,52 +8,6 @@ if (length(new.packages)) install.packages(new.packages, repos="https://cran.sta
 lapply(list.of.packages, library, character.only = TRUE)
 library(rgdal)
 # ###################################################
-# ###################################################
-# # # INPUT  FILE PATH SETTINGS reading
-# Mainpath <-"F:/PROGETTI_AGRONOMICO/LAMPvm/"
-# Mainpath <-"C:/dbGIS/"
-# shapefolder<-paste(Mainpath, "satCentos7/AcquaCAMPUS_shape", sep ="") # folder con shapefile per calcolo
-# folderpath<- paste(Mainpath, "2A_new", sep ="") # folder con le cartelle del raster sentinel2
-# pathOUTplot<-paste(Mainpath, "satCentos7/sentinelScript/outscript/plot/", sep ="")   # folder di output
-# pathOUTtable <- paste(Mainpath, "satCentos7/sentinelScript/outscript/plot/outTable1.csv", sep ="") # file csv
-# tempFolder<-paste(Mainpath, "temp", sep ="") # file csv  # folder dei file temp
-# tempFolderClean<-paste(tempFolder, "/", sep = "")
-######POLYGON AREAS
-# shapefolder<-"//172.17.0.30/DocumentiCER/Agronomicoamb/Letterio/PSR2014/SOIA/Aziende/"
-# shapefolder<-"/mnt/LAMPvm/satCentos7/AcquaCAMPUS_shape/"
-# shapefolder<-"F:/PROGETTI_AGRONOMICO/LAMPvm/satCentos7/AcquaCAMPUS_shape/"
-# shapefolder<-"C:/Users/tonpo/Documents/scriptLocal/R_sentinel_input/AcquaCAMPUS_shape"
-######RASTER FOLDER
-# folderpath<- "//172.17.0.30/giscer/PROGETTI_AGRONOMICO/LAMPvm/satCentos7/sentinelScript/outscript/2A/"
-# folderpath<- "/mnt/LAMPvm/2A/"
-# folderpath<- "C:/Users/tonpo/Documents/scriptLocal/R_sentinel_input/2a_input/"
-######OUTPUT DIR
-# pathOUTplot<- "/mnt/LAMPvm/satCentos7/sentinelScript/outscript/plot/"
-# pathOUTplot<- "C:/Users/tonpo/Documents/scriptLocal/R_sentinel_input/out/"
-# pathOUTtable <- "C:/Users/tonpo/Documents/scriptLocal/R_sentinel_input/out/outTable1.csv"
-# pathOUTtable <- "/mnt/LAMPvm/satCentos7/sentinelScript/outscript/plot/outTable1.csv"
-######TEMPFOLDER
-# tempFolderClean<- "/mnt/LAMPvm/temp/"
-# tempFolderClean<- "C:/Users/tonpo/Documents/scriptLocal/R_sentinel_input/temp/"
-###################################################
-# ###################################################
-# SET TEMP DIR for RASTER and LARG FILE
-# rasterOptions(tmpdir = "//172.17.0.30/giscer/PROGETTI_AGRONOMICO/temp")
-# write("R_USER = //172.17.0.30/giscer/PROGETTI_AGRONOMICO/temp", file=file.path(Sys.getenv('R_USER'), '.Renviron'))
-# rasterOptions(tmpdir = "/mnt/LAMPvm/temp")
-# rasterOptions(tmpdir = tempFolder)
-# rasterOptions(tmpdir = "F:/PROGETTI_AGRONOMICO/LAMPvm/temp")
-# write("R_USER = /mnt/LAMPvm/temp", file=file.path(Sys.getenv('R_USER'), '.Renviron'))
-# writeTempPath<-paste ("R_USER = ",  tempFolder, sep = "")
-# write(writeTempPath, file=file.path(Sys.getenv('R_USER'), '.Renviron'))
-
-# write("R_USER = F:/PROGETTI_AGRONOMICO/LAMPvm/temp", file=file.path(Sys.getenv('R_USER'), '.Renviron'))
-# ###################################################
-# ###################################################
-#*#*# Process for folder analysis of sentinel2 raster data
-##input : folder with multiple subfolder eachone as a image date as sentinel2
-# ###################################################
-# ###################################################
 # #CLASSI:
 # /*/GetRASTERFilePathANDArray:
 # input: un folder con 1 subfolder per ogni sentinel2 image già bottom-of-atm quindi livello 2A
@@ -982,69 +936,6 @@ Filteringoutput_thre<- function(ypred, v2input, v3input, threNDVI, threGNDVI){
 								# print("###END outputVector")
 								return(outputVector)
 }
-# ###################################################
-# ###################################################
-# ###################################################
-# # # # # # MAIN
-# #read polygon to calculate values
-# shapeOUTArray<-fileListShape(shapefolder)
-# shapeOUTArrayFileName<-fileListShapeFileName(shapefolder)
-# shapeOUTArray
-# # read raster
-# listFolder<-list.files(folderpath, full = TRUE)
-# GetFileN<-GetRASTERFilePathANDArray(listFolder) # creo la l'array con un vettore di path dei file per ogni SUBFOLDER
-# ArrayRaster<-GetFileN$GetRasterArray()# creo un array di raster per ogni folder
-# ArrayRasterDate<-GetFileN$GetRasterDATEvector() # creo una lista di date dei rilievi
-# ArrayDateVector<-as.Date(unlist(ArrayRasterDate)) # converto la lista in vettore
-# ######INDEX of Satellite INDEX to CALC as in RStoolCalcINDEX
-# # IndexToCalc<-c("NDWI2", "SATVI") 
-# # IndexToCalc<-c("NDVI", "SAVI", "CTVI", "GNDVI", "SR", "MSAVI", "NDWI", "MNDWI", "NDWI2") 
-# # IndexToCalc<-c("SR", "NRVI", "MSAVI")
-# IndexToCalc<-c("NDVI", "SAVI", "SR", "NDWI2")
-# # IndexToCalc<-c("NDVI", "NDWI2")
-# xLimMax<-c(2)
-# xLimMin<-c(-0.5)
-# # ###################################################
-# # # # RUN PROCESS
-# CalcIndexForEachFolder<-lapply(ArrayRaster, function(x){
-									# print("##RUN Cycle##")
-									# CalcIndexVector<-CalcIndex(x, shapeOUTArray, IndexToCalc )
-									# VIindexes<-CalcIndexVector$RStoolCalcINDEX()
-									# return(VIindexes)
-									# })#calcolo gli indici vegetazionali e maschero con SCL raster
-# # ##Elaborazione output Funzione						
-# res<-mapply(funT, CalcIndexForEachFolder, ArrayDateVector) #formato output
-# rownames(res)<-shapeOUTArrayFileName
-# colnames(res)<-as.Date(ArrayDateVector)					
-# TabDef<-ResElab(res)									
-# TabDef<-TabDef[TabDef$RepV1 != "i",]
-# # TabDef<-TabDef[TabDef$RepV1 == "SR",]
-# TabDef$Vec2<-as.numeric(as.character(TabDef$Vec2))
-# head(TabDef)
-# # ##elaborazione per PLOT
-# TabCast<-as.data.frame(dcast(TabDef,  ID+RepV1+Date~Vec1, mean))
-# colnames(TabCast)[4:9]<-c("q1", "q3", "maxV", "meanV", "medianV", "minV")
-# by(TabCast,TabCast$ID, function(x){ 
-						# PlotDBtot <- (ggplot(x, aes(as.Date(Date), medianV)) +
-													# geom_point(aes(color = factor(RepV1)),size=2.5) +
-													# geom_line(aes(color = factor(RepV1)),size=1.5)+
-													# theme(legend.text=element_text(size=8))+
-													# theme(legend.position = "bottom")+
-													# ylim(-1,xLimMax))+
-													# geom_errorbar(aes(ymin=q1, ymax=q3), width=.9, position=position_dodge(0.05))+ 
-													# labs(title=x$ID,
-													# x ="Date", y = "index Value")+
-												    # geom_smooth(se=FALSE, linetype="dashed", size=0.5)
-						# tiff(paste(pathOUTplot, x$ID, ".tif", sep=""), width = 2000, height = 1800, units = 'px', res=200)
-						# print(PlotDBtot)
-						# dev.off()
-						# })
-# ##elaborazione per writeCSV output
-# # csvout<-write.csv(TabCast, "C:/Users/tonpo/source/repos/PythonSentinelDownload/plot/outTable1.csv")
-# csvout<-write.csv(TabCast, pathOUTtable)
-# pathOUTtable
-# #clean TEMP folder
-# do.call(file.remove, list(list.files(tempFolderClean, full.names = TRUE)))
 
 
 
